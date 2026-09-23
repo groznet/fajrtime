@@ -1,0 +1,23 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\PrayerTimeService;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class DashboardController extends Controller
+{
+    public function index(Request $request, PrayerTimeService $prayerTimes): View
+    {
+        $user = $request->user();
+        $city = $user->city;
+
+        return view('dashboard.index', [
+            'user' => $user,
+            'city' => $city,
+            'times' => $city ? $prayerTimes->today($city) : null,
+            'nextFajr' => $city ? $prayerTimes->nextFajr($city)?->setTimezone($user->timezone) : null,
+        ]);
+    }
+}
