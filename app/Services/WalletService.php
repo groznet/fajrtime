@@ -113,6 +113,38 @@ class WalletService
     }
 
     /**
+     * An eliminated participant loses the stake: it leaves the locked balance for good.
+     * Must run inside the settlement transaction.
+     */
+    public function forfeitStake(User $user, Challenge $challenge): void
+    {
+        $this->record($user->id, 'forfeit', -$challenge->stake_amount, 'locked', [
+            'challenge_id' => $challenge->id,
+            'description' => 'Ставка потеряна: пропущен подъём',
+        ]);
+    }
+
+    /**
+     * A survivor gets the stake back plus an equal share of the forfeit pool; no commission is taken.
+     * Must run inside the settlement transaction.
+     */
+    public function payOut(User $user, Challenge $challenge, int $share): int
+    {
+        $payout = $challenge->stake_amount + $share;
+
+        $this->record($user->id, 'stake_unlock', -$challenge->stake_amount, 'locked', [
+            'challenge_id' => $challenge->id,
+            'description' => 'Ставка разблокирована',
+        ]);
+        $this->record($user->id, 'payout', $payout, 'available', [
+            'challenge_id' => $challenge->id,
+            'description' => 'Выплата за челлендж',
+        ]);
+
+        return $payout;
+    }
+
+    /**
      * Write a ledger row and update the cached balance. Must run inside a DB transaction.
      */
     private function record(int $userId, string $type, int $amount, string $affects, array $attributes = []): Transaction

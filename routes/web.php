@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ChallengeController;
+use App\Http\Controllers\CheckInController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PrayerTimeController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\WalletController;
@@ -27,6 +29,12 @@ Route::get('/groups/{group:slug}', [GroupController::class, 'show'])->name('grou
 Route::get('/invite/{token}', [GroupController::class, 'invite'])->name('groups.invite');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/check-in', [CheckInController::class, 'show'])->name('check-in');
+    Route::get('/check-in/state', [CheckInController::class, 'state'])->middleware('throttle:30,1')->name('check-in.state');
+    Route::post('/check-in', [CheckInController::class, 'store'])->middleware('throttle:20,1')->name('check-in.store');
+
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
+
     Route::get('/my/groups', [GroupController::class, 'mine'])->name('groups.mine');
     Route::get('/my/groups/create', [GroupController::class, 'create'])->name('groups.create');
     Route::post('/my/groups', [GroupController::class, 'store'])->middleware('throttle:10,1')->name('groups.store');

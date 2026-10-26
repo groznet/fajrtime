@@ -8,10 +8,12 @@
             <div class="hidden sm:flex items-center gap-6 text-sm">
                 @auth
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Панель</x-nav-link>
+                    <x-nav-link :href="route('check-in')" :active="request()->routeIs('check-in')">Подъём</x-nav-link>
                     <x-nav-link :href="route('groups.mine')" :active="request()->routeIs('groups.mine', 'groups.create')">Мои группы</x-nav-link>
                     <x-nav-link :href="route('groups.index')" :active="request()->routeIs('groups.index', 'groups.show')">Группы</x-nav-link>
                     <x-nav-link :href="route('wallet')" :active="request()->routeIs('wallet*')">Кошелёк</x-nav-link>
                     <x-nav-link :href="route('prayer-times')" :active="request()->routeIs('prayer-times')">Время намаза</x-nav-link>
+                    <x-nav-link :href="route('notifications')" :active="request()->routeIs('notifications')">Уведомления@if (($unread = auth()->user()->unreadNotifications()->count()) > 0) <span class="ml-1 px-1.5 rounded-full bg-red-600 text-white text-xs">{{ $unread }}</span>@endif</x-nav-link>
                     <x-nav-link :href="route('settings.edit')" :active="request()->routeIs('settings.*')">Настройки</x-nav-link>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
@@ -37,11 +39,13 @@
     <div x-show="open" x-cloak class="sm:hidden border-t border-gray-200 px-4 py-3 space-y-2 flex flex-col">
         @auth
             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Панель</x-nav-link>
-            <x-nav-link :href="route('groups.mine')" :active="request()->routeIs('groups.mine', 'groups.create')">Мои группы</x-nav-link>
+            <x-nav-link :href="route('check-in')" :active="request()->routeIs('check-in')">Подъём</x-nav-link>
+                    <x-nav-link :href="route('groups.mine')" :active="request()->routeIs('groups.mine', 'groups.create')">Мои группы</x-nav-link>
                     <x-nav-link :href="route('groups.index')" :active="request()->routeIs('groups.index', 'groups.show')">Группы</x-nav-link>
                     <x-nav-link :href="route('wallet')" :active="request()->routeIs('wallet*')">Кошелёк</x-nav-link>
             <x-nav-link :href="route('prayer-times')" :active="request()->routeIs('prayer-times')">Время намаза</x-nav-link>
-            <x-nav-link :href="route('settings.edit')" :active="request()->routeIs('settings.*')">Настройки</x-nav-link>
+            <x-nav-link :href="route('notifications')" :active="request()->routeIs('notifications')">Уведомления@if (($unread = auth()->user()->unreadNotifications()->count()) > 0) <span class="ml-1 px-1.5 rounded-full bg-red-600 text-white text-xs">{{ $unread }}</span>@endif</x-nav-link>
+                    <x-nav-link :href="route('settings.edit')" :active="request()->routeIs('settings.*')">Настройки</x-nav-link>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="text-gray-600">Выйти</button>

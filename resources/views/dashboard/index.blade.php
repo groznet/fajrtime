@@ -9,6 +9,13 @@
         <a href="{{ route('wallet') }}" class="px-4 py-2 rounded-md bg-emerald-700 text-white text-sm hover:bg-emerald-800">Пополнить</a>
     </x-card>
 
+    @if ($checkIn)
+        <x-card title="Подтверждение подъёма" class="mb-6">
+            <x-check-in-widget :state="$checkIn" />
+            <a href="{{ route('check-in') }}" class="mt-3 inline-block text-xs text-gray-500 underline">Отдельная страница для закладки</a>
+        </x-card>
+    @endif
+
     <x-card title="Мои челленджи" class="mb-6">
         @if ($participations->isEmpty())
             <p class="text-gray-600">

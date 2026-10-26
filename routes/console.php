@@ -9,3 +9,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('challenges:start-due')->everyMinute()->withoutOverlapping();
+Schedule::command('checkins:schedule')->everyFiveMinutes()->withoutOverlapping();
+Schedule::command('checkins:expire')->everyMinute()->withoutOverlapping();
+Schedule::command('challenges:settle')->hourly()->withoutOverlapping();

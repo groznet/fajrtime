@@ -78,6 +78,17 @@ class User extends Authenticatable
             ->exists();
     }
 
+    /**
+     * Whether the user is a live participant of a challenge that has already started.
+     */
+    public function hasRunningChallenge(): bool
+    {
+        return $this->participations()
+            ->where('status', 'active')
+            ->whereHas('challenge', fn ($q) => $q->where('status', 'active'))
+            ->exists();
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === 'admin';

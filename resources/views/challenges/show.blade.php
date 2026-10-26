@@ -43,7 +43,14 @@
                     @foreach ($visible as $participant)
                         <li class="py-2 flex justify-between gap-4">
                             <span>{{ $participant->user->name }}</span>
-                            <span class="text-gray-600">{{ $participant->statusLabel() }}</span>
+                            <span class="text-gray-600">
+                                {{ $participant->statusLabel() }}
+                                @if ($participant->status === 'survived')
+                                    · получил(а) <x-money :amount="$participant->payout_amount" class="text-gray-900" />
+                                @elseif ($participant->status === 'eliminated' && $participant->eliminated_on)
+                                    · {{ $participant->eliminated_on->translatedFormat('j F') }}
+                                @endif
+                            </span>
                         </li>
                     @endforeach
                 </ul>

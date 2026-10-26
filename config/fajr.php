@@ -35,6 +35,13 @@ return [
         'stake_max' => 10_000_00,
         'min_participants' => 3,
         'max_participants' => 100,
+        // The code appears at a random moment from (Fajr + start) to (Fajr + start + length), minutes.
+        'reveal_range_start_min' => 0,
+        'reveal_range_length_min' => 10,
+        'code_valid_min' => 5,
+        'checkin_max_attempts' => 5,
+        // How long before Fajr the day's check-in row is created.
+        'checkin_schedule_ahead_hours' => 12,
     ],
 
 ];
