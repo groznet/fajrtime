@@ -18,6 +18,11 @@ return [
         'domain' => env('OPERATOR_DOMAIN', 'fajrrise.ru'),
     ],
 
+    // Recruiting closes at 00:00 of the start date in this timezone (a challenge's `start_date` is a plain date).
+    'challenge_timezone' => 'Europe/Moscow',
+
+    'cycle_days' => [7, 10, 14, 30],
+
     // Bump when the privacy policy / terms change materially.
     'legal_updated_at' => '2026-10-27',
 
@@ -26,6 +31,10 @@ return [
         'topup_min' => 100_00,
         'topup_max' => 50_000_00,
         'withdrawal_min' => 100_00,
+        'stake_min' => 100_00,
+        'stake_max' => 10_000_00,
+        'min_participants' => 3,
+        'max_participants' => 100,
     ],
 
 ];

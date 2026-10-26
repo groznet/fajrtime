@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Challenge;
 use App\Services\PrayerTimeService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -15,6 +16,11 @@ class DashboardController extends Controller
 
         return view('dashboard.index', [
             'user' => $user,
+            'participations' => $user->participations()
+                ->where('status', 'active')
+                ->whereHas('challenge', fn ($q) => $q->whereIn('status', Challenge::OPEN))
+                ->with('challenge.group')
+                ->get(),
             'city' => $city,
             'times' => $city ? $prayerTimes->today($city) : null,
             'nextFajr' => $city ? $prayerTimes->nextFajr($city)?->setTimezone($user->timezone) : null,

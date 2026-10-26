@@ -24,7 +24,10 @@ class SettingsController extends Controller
         $user->fill($request->safe()->only(['name', 'email']));
 
         if ((int) $request->validated('city_id') !== $user->city_id) {
-            // TODO(phase 3): block the change while the user is in an active challenge.
+            if ($user->hasOpenChallenges()) {
+                return back()->withInput()->withErrors(['city_id' => 'Город нельзя менять, пока вы участвуете в челлендже.']);
+            }
+
             $user->moveToCity(City::findOrFail($request->validated('city_id')));
         }
 

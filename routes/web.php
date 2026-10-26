@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ChallengeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PrayerTimeController;
 use App\Http\Controllers\SettingsController;
@@ -20,7 +22,22 @@ Route::view('/privacy', 'legal.privacy')->name('privacy');
 Route::view('/offer', 'legal.offer')->name('offer');
 Route::view('/consent', 'legal.consent')->name('consent');
 
+Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');
+Route::get('/groups/{group:slug}', [GroupController::class, 'show'])->name('groups.show');
+Route::get('/invite/{token}', [GroupController::class, 'invite'])->name('groups.invite');
+
 Route::middleware('auth')->group(function () {
+    Route::get('/my/groups', [GroupController::class, 'mine'])->name('groups.mine');
+    Route::get('/my/groups/create', [GroupController::class, 'create'])->name('groups.create');
+    Route::post('/my/groups', [GroupController::class, 'store'])->middleware('throttle:10,1')->name('groups.store');
+    Route::post('/groups/{group:slug}/join', [GroupController::class, 'join'])->name('groups.join');
+    Route::post('/groups/{group:slug}/leave', [GroupController::class, 'leave'])->name('groups.leave');
+    Route::post('/groups/{group:slug}/challenges', [ChallengeController::class, 'store'])->name('challenges.store');
+
+    Route::get('/challenges/{challenge}', [ChallengeController::class, 'show'])->name('challenges.show');
+    Route::post('/challenges/{challenge}/join', [ChallengeController::class, 'join'])->middleware('throttle:20,1')->name('challenges.join');
+    Route::post('/challenges/{challenge}/leave', [ChallengeController::class, 'leave'])->middleware('throttle:20,1')->name('challenges.leave');
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/settings', [SettingsController::class, 'edit'])->name('settings.edit');

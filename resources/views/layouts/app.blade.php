@@ -29,6 +29,10 @@
                         </div>
                     @endif
 
+                    @foreach (collect(['challenge', 'group', 'balance'])->flatMap(fn ($key) => $errors->get($key)) as $message)
+                        <div class="mb-6 border border-red-200 bg-red-50 text-red-800 rounded-md px-4 py-3">{{ $message }}</div>
+                    @endforeach
+
                     {{ $slot }}
                 </div>
             </main>

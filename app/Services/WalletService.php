@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Challenge;
 use App\Models\Payment;
 use App\Models\Transaction;
 use App\Models\User;
@@ -45,7 +46,10 @@ class WalletService
         return DB::transaction(function () use ($user, $amount, $details) {
             $locked = $this->lockUser($user->id);
 
-            // TODO(phase 3): refuse while the user is in an active challenge.
+            if ($locked->hasOpenChallenges()) {
+                throw ValidationException::withMessages(['amount' => 'Вывод недоступен, пока вы участвуете в челлендже.']);
+            }
+
             if ($locked->withdrawals()->where('status', 'requested')->exists()) {
                 throw ValidationException::withMessages(['amount' => 'У вас уже есть заявка на вывод в обработке.']);
             }
@@ -65,6 +69,46 @@ class WalletService
             ]);
 
             return $withdrawal;
+        });
+    }
+
+    /**
+     * Move the stake from the available to the locked balance when joining a challenge.
+     */
+    public function lockStake(User $user, Challenge $challenge): void
+    {
+        DB::transaction(function () use ($user, $challenge) {
+            $locked = $this->lockUser($user->id);
+
+            if ($locked->balance_available < $challenge->stake_amount) {
+                throw ValidationException::withMessages(['balance' => 'Недостаточно средств на балансе.']);
+            }
+
+            $this->record($user->id, 'stake_lock', -$challenge->stake_amount, 'available', [
+                'challenge_id' => $challenge->id,
+                'description' => 'Ставка за вступление в челлендж',
+            ]);
+            $this->record($user->id, 'stake_lock', $challenge->stake_amount, 'locked', [
+                'challenge_id' => $challenge->id,
+                'description' => 'Ставка за вступление в челлендж',
+            ]);
+        });
+    }
+
+    /**
+     * Return a locked stake to the available balance (left the challenge, or it was cancelled).
+     */
+    public function unlockStake(User $user, Challenge $challenge): void
+    {
+        DB::transaction(function () use ($user, $challenge) {
+            $this->record($user->id, 'stake_unlock', -$challenge->stake_amount, 'locked', [
+                'challenge_id' => $challenge->id,
+                'description' => 'Ставка возвращена',
+            ]);
+            $this->record($user->id, 'stake_unlock', $challenge->stake_amount, 'available', [
+                'challenge_id' => $challenge->id,
+                'description' => 'Ставка возвращена',
+            ]);
         });
     }
 

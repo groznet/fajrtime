@@ -9,6 +9,28 @@
         <a href="{{ route('wallet') }}" class="px-4 py-2 rounded-md bg-emerald-700 text-white text-sm hover:bg-emerald-800">Пополнить</a>
     </x-card>
 
+    <x-card title="Мои челленджи" class="mb-6">
+        @if ($participations->isEmpty())
+            <p class="text-gray-600">
+                Вы пока не участвуете ни в одном челлендже.
+                <a href="{{ route('groups.index') }}" class="underline text-emerald-800">Найти группу</a>
+            </p>
+        @else
+            <ul class="divide-y divide-gray-100 text-sm">
+                @foreach ($participations as $participation)
+                    @php($challenge = $participation->challenge)
+                    <li class="py-2 flex flex-wrap justify-between gap-x-4">
+                        <a href="{{ route('challenges.show', $challenge) }}" class="underline">{{ $challenge->group->name }}</a>
+                        <span class="text-gray-600">
+                            {{ $challenge->statusLabel() }} · {{ $challenge->start_date->translatedFormat('j F') }} — {{ $challenge->end_date->translatedFormat('j F') }}
+                            · ставка <x-money :amount="$challenge->stake_amount" />
+                        </span>
+                    </li>
+                @endforeach
+            </ul>
+        @endif
+    </x-card>
+
     @if ($city === null)
         <x-card>
             <p>Укажите город в <a href="{{ route('settings.edit') }}" class="underline">настройках</a>, чтобы видеть время намаза.</p>
