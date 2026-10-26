@@ -2,7 +2,6 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-3 text-sm text-gray-500">
         <div class="flex flex-wrap gap-x-6 gap-y-2">
             <a href="{{ route('how-it-works') }}" class="hover:text-gray-900">Как это работает</a>
-            <a href="{{ route('faq') }}" class="hover:text-gray-900">Вопросы и ответы</a>
             <a href="{{ route('contact') }}" class="hover:text-gray-900">Контакты</a>
             <a href="{{ route('terms') }}" class="hover:text-gray-900">Пользовательское соглашение</a>
             <a href="{{ route('privacy') }}" class="hover:text-gray-900">Политика конфиденциальности</a>

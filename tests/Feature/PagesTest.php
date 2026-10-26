@@ -21,7 +21,7 @@ class PagesTest extends TestCase
 
     public static function publicPages(): array
     {
-        return [['/'], ['/how-it-works'], ['/faq'], ['/contact'], ['/terms'], ['/privacy'], ['/offer'], ['/consent']];
+        return [['/'], ['/how-it-works'], ['/contact'], ['/terms'], ['/privacy'], ['/offer'], ['/consent']];
     }
 
     #[DataProvider('publicPages')]

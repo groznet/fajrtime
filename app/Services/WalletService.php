@@ -73,6 +73,43 @@ class WalletService
     }
 
     /**
+     * The admin has paid the withdrawal out by hand. The money already left the balance when it was requested.
+     */
+    public function markWithdrawalPaid(Withdrawal $withdrawal): void
+    {
+        DB::transaction(function () use ($withdrawal) {
+            $this->lockOpenWithdrawal($withdrawal)->update(['status' => 'paid', 'processed_at' => now()]);
+        });
+    }
+
+    /**
+     * Reject a withdrawal request and put the money back on the available balance.
+     */
+    public function rejectWithdrawal(Withdrawal $withdrawal): void
+    {
+        DB::transaction(function () use ($withdrawal) {
+            $withdrawal = $this->lockOpenWithdrawal($withdrawal);
+            $withdrawal->update(['status' => 'rejected', 'processed_at' => now()]);
+
+            $this->record($withdrawal->user_id, 'adjustment', $withdrawal->amount, 'available', [
+                'withdrawal_id' => $withdrawal->id,
+                'description' => 'Возврат: заявка на вывод отклонена',
+            ]);
+        });
+    }
+
+    private function lockOpenWithdrawal(Withdrawal $withdrawal): Withdrawal
+    {
+        $locked = Withdrawal::whereKey($withdrawal->id)->lockForUpdate()->firstOrFail();
+
+        if ($locked->status !== 'requested') {
+            throw ValidationException::withMessages(['withdrawal' => 'Эта заявка уже обработана.']);
+        }
+
+        return $locked;
+    }
+
+    /**
      * Move the stake from the available to the locked balance when joining a challenge.
      */
     public function lockStake(User $user, Challenge $challenge): void

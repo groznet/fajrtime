@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('prayer-times')" :active="request()->routeIs('prayer-times')">Время намаза</x-nav-link>
                     <x-nav-link :href="route('notifications')" :active="request()->routeIs('notifications')">Уведомления@if (($unread = auth()->user()->unreadNotifications()->count()) > 0) <span class="ml-1 px-1.5 rounded-full bg-red-600 text-white text-xs">{{ $unread }}</span>@endif</x-nav-link>
                     <x-nav-link :href="route('settings.edit')" :active="request()->routeIs('settings.*')">Настройки</x-nav-link>
+                    @if (auth()->user()->isAdmin())
+                        <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.*')">Админка</x-nav-link>
+                    @endif
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="text-gray-600 hover:text-gray-900">Выйти</button>

@@ -75,6 +75,11 @@ class ChallengeService
                 throw ValidationException::withMessages(['challenge' => 'Вы уже участвуете в этом челлендже.']);
             }
 
+            // MVP rule: one recruiting or running challenge at a time.
+            if ($user->hasOpenChallenges()) {
+                throw ValidationException::withMessages(['challenge' => 'Вы уже участвуете в другом челлендже. Вступить в новый можно после его завершения.']);
+            }
+
             if ($challenge->participants()->where('status', 'active')->count() >= Setting::int('max_participants')) {
                 throw ValidationException::withMessages(['challenge' => 'В челлендже нет свободных мест.']);
             }

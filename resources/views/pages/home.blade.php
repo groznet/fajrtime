@@ -11,6 +11,7 @@
             @else
                 <a href="{{ route('register') }}" class="px-4 py-2 rounded-md bg-emerald-700 text-white hover:bg-emerald-800">Зарегистрироваться</a>
             @endauth
+            <a href="{{ route('groups.index') }}" class="px-4 py-2 rounded-md border border-gray-300 bg-white hover:bg-gray-50">Найти группу</a>
             <a href="{{ route('how-it-works') }}" class="px-4 py-2 rounded-md border border-gray-300 bg-white hover:bg-gray-50">Как это работает</a>
         </div>
     </section>
@@ -19,7 +20,7 @@
         <x-card>
             <p class="text-sm text-emerald-800 font-medium">Шаг 1</p>
             <p class="mt-1 font-medium">Пополните баланс</p>
-            <p class="mt-1 text-sm text-gray-600">Выберите группу и внесите депозит.</p>
+            <p class="mt-1 text-sm text-gray-600">Выберите группу и внесите ставку — она блокируется на балансе до конца челленджа.</p>
         </x-card>
         <x-card>
             <p class="text-sm text-emerald-800 font-medium">Шаг 2</p>
@@ -32,4 +33,8 @@
             <p class="mt-1 text-sm text-gray-600">Выдержавшие возвращают депозит и делят депозиты пропустивших.</p>
         </x-card>
     </section>
+
+    <p class="mt-6 text-sm text-gray-600">
+        Пример расчёта и ответы на частые вопросы — на странице <a href="{{ route('how-it-works') }}" class="underline text-emerald-800">«Как это работает»</a>.
+    </p>
 </x-app-layout>
