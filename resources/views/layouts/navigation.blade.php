@@ -8,6 +8,7 @@
             <div class="hidden sm:flex items-center gap-6 text-sm">
                 @auth
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Панель</x-nav-link>
+                    <x-nav-link :href="route('wallet')" :active="request()->routeIs('wallet*')">Кошелёк</x-nav-link>
                     <x-nav-link :href="route('prayer-times')" :active="request()->routeIs('prayer-times')">Время намаза</x-nav-link>
                     <x-nav-link :href="route('settings.edit')" :active="request()->routeIs('settings.*')">Настройки</x-nav-link>
                     <form method="POST" action="{{ route('logout') }}">
@@ -33,6 +34,7 @@
     <div x-show="open" x-cloak class="sm:hidden border-t border-gray-200 px-4 py-3 space-y-2 flex flex-col">
         @auth
             <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Панель</x-nav-link>
+            <x-nav-link :href="route('wallet')" :active="request()->routeIs('wallet*')">Кошелёк</x-nav-link>
             <x-nav-link :href="route('prayer-times')" :active="request()->routeIs('prayer-times')">Время намаза</x-nav-link>
             <x-nav-link :href="route('settings.edit')" :active="request()->routeIs('settings.*')">Настройки</x-nav-link>
             <form method="POST" action="{{ route('logout') }}">

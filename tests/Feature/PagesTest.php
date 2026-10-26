@@ -21,13 +21,26 @@ class PagesTest extends TestCase
 
     public static function publicPages(): array
     {
-        return [['/'], ['/how-it-works'], ['/faq'], ['/contact'], ['/terms'], ['/privacy'], ['/offer']];
+        return [['/'], ['/how-it-works'], ['/faq'], ['/contact'], ['/terms'], ['/privacy'], ['/offer'], ['/consent']];
     }
 
     #[DataProvider('publicPages')]
     public function test_public_pages_render(string $url): void
     {
         $this->get($url)->assertOk();
+    }
+
+    public function test_contact_page_and_footer_show_site_owner_details(): void
+    {
+        config(['fajr.operator.email' => 'owner@example.ru', 'fajr.operator.address' => 'г. Тест, ул. Главная, 1']);
+
+        $this->get('/contact')->assertSee('owner@example.ru')->assertSee('г. Тест, ул. Главная, 1');
+        $this->get('/')->assertSee('owner@example.ru')->assertSee('Политика конфиденциальности');
+    }
+
+    public function test_register_page_links_to_legal_documents(): void
+    {
+        $this->get('/register')->assertSee(route('privacy'))->assertSee(route('terms'))->assertSee(route('offer'))->assertSee(route('consent'));
     }
 
     public function test_prayer_times_page_shows_selected_city(): void

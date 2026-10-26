@@ -38,12 +38,20 @@ class RegisteredUserController extends Controller
             'email' => ['required', 'string', 'lowercase', 'email', 'max:150', 'unique:'.User::class],
             'city_id' => ['required', 'integer', 'exists:cities,id'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            // Consent to personal data processing is given separately from the terms (152-FZ art. 9 part 1).
+            'terms' => ['accepted'],
+            'consent' => ['accepted'],
+        ], [
+            'terms.accepted' => 'Необходимо принять пользовательское соглашение и публичную оферту.',
+            'consent.accepted' => 'Без согласия на обработку персональных данных регистрация невозможна.',
         ]);
 
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'terms_accepted_at' => now(),
+            'personal_data_consent_at' => now(),
         ]);
         $user->moveToCity(City::findOrFail($request->city_id));
         $user->save();

@@ -28,6 +28,8 @@ class RegistrationTest extends TestCase
             'city_id' => $city->id,
             'password' => 'password',
             'password_confirmation' => 'password',
+            'terms' => '1',
+            'consent' => '1',
         ]);
 
         $this->assertAuthenticated();
@@ -40,6 +42,27 @@ class RegistrationTest extends TestCase
         $this->assertSame(0, $user->fresh()->balance_available);
     }
 
+    public function test_terms_and_personal_data_consent_are_separate_required_checkboxes(): void
+    {
+        $city = City::factory()->create();
+        $payload = [
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'city_id' => $city->id,
+            'password' => 'password',
+            'password_confirmation' => 'password',
+        ];
+
+        $this->post('/register', $payload + ['consent' => '1'])->assertSessionHasErrors('terms');
+        $this->post('/register', $payload + ['terms' => '1'])->assertSessionHasErrors('consent');
+        $this->assertGuest();
+
+        $this->post('/register', $payload + ['terms' => '1', 'consent' => '1']);
+        $user = User::firstWhere('email', 'test@example.com');
+        $this->assertNotNull($user->terms_accepted_at);
+        $this->assertNotNull($user->personal_data_consent_at);
+    }
+
     public function test_city_is_required(): void
     {
         $this->post('/register', [
@@ -47,6 +70,8 @@ class RegistrationTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'terms' => '1',
+            'consent' => '1',
         ])->assertSessionHasErrors('city_id');
 
         $this->assertGuest();
@@ -62,6 +87,8 @@ class RegistrationTest extends TestCase
             'city_id' => $city->id,
             'password' => 'password',
             'password_confirmation' => 'password',
+            'terms' => '1',
+            'consent' => '1',
             'role' => 'admin',
             'balance_available' => 100000,
         ]);
