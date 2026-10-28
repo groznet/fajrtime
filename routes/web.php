@@ -23,6 +23,7 @@ Route::view('/contact', 'legal.contact')->name('contact');
 Route::view('/terms', 'legal.terms')->name('terms');
 Route::view('/privacy', 'legal.privacy')->name('privacy');
 Route::view('/offer', 'legal.offer')->name('offer');
+Route::view('/requisites', 'legal.requisites')->name('requisites');
 Route::view('/consent', 'legal.consent')->name('consent');
 
 Route::get('/groups', [GroupController::class, 'index'])->name('groups.index');

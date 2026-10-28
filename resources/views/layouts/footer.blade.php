@@ -6,6 +6,7 @@
             <a href="{{ route('terms') }}" class="hover:text-gray-900">Пользовательское соглашение</a>
             <a href="{{ route('privacy') }}" class="hover:text-gray-900">Политика конфиденциальности</a>
             <a href="{{ route('offer') }}" class="hover:text-gray-900">Публичная оферта</a>
+            <a href="{{ route('requisites') }}" class="hover:text-gray-900">Реквизиты</a>
             <a href="{{ route('consent') }}" class="hover:text-gray-900">Согласие на обработку ПДн</a>
         </div>
         <div class="flex flex-wrap gap-x-6 gap-y-1 text-xs">
