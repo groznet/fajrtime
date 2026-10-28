@@ -14,6 +14,7 @@ return [
         'reg_number' => env('OPERATOR_OGRN'),
         'address' => env('OPERATOR_ADDRESS', 'г. Грозный, Чеченская Республика, Россия'),
         'email' => env('OPERATOR_EMAIL', 'info@fajrrise.ru'),
+        'phone' => env('OPERATOR_PHONE'),
         'telegram' => env('OPERATOR_TELEGRAM', '@fajrrise'),
         'domain' => env('OPERATOR_DOMAIN', 'fajrrise.ru'),
     ],

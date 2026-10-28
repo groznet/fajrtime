@@ -12,6 +12,10 @@
     @endif
     <dt class="text-gray-500">Место нахождения и адрес</dt>
     <dd>{{ $op['address'] }}</dd>
+    @if ($op['phone'])
+        <dt class="text-gray-500">Телефон</dt>
+        <dd><a href="tel:{{ preg_replace('/[^\d+]/', '', $op['phone']) }}" class="underline text-emerald-800">{{ $op['phone'] }}</a></dd>
+    @endif
     <dt class="text-gray-500">Email</dt>
     <dd><a href="mailto:{{ $op['email'] }}" class="underline text-emerald-800">{{ $op['email'] }}</a></dd>
     <dt class="text-gray-500">Сайт</dt>

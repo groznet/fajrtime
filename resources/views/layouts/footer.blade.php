@@ -13,6 +13,9 @@
             <span>&copy; {{ date('Y') }} {{ config('fajr.operator.legal_name') ?: config('app.name') }}</span>
             <span>{{ config('fajr.operator.address') }}</span>
             <a href="mailto:{{ config('fajr.operator.email') }}" class="hover:text-gray-900">{{ config('fajr.operator.email') }}</a>
+            @if (config('fajr.operator.phone'))
+                <span>{{ config('fajr.operator.phone') }}</span>
+            @endif
             @if (config('fajr.operator.tax_id'))
                 <span>ИНН {{ config('fajr.operator.tax_id') }}</span>
             @endif
